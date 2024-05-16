@@ -45,3 +45,13 @@ El ejercicio consiste en diseñar un Sistema de Gestión de Biblioteca que abord
 ![diagra_secuencia-4](./diagrama_secuencia-4.png)
 
 **Descripción: Este diagrama muestra cómo los bibliotecarios pueden gestionar el inventario de la biblioteca, incluyendo la adición de nuevos libros, eliminación de libros obsoletos o dañados, actualización de la información de los libros y generación de informes sobre el estado del inventario.**
+
+
+
+**Diagrama de casos de uso del ejecicio de un Sistema de gestion de blibioteca**
+
+El ejercicio consiste en diseñar un Sistema de Gestión de Biblioteca que aborda cuatro requerimientos funcionales clave: Registro de Usuarios, Búsqueda de Libros, Préstamo de Libros y Gestión de Inventario. 
+
+Descripcion: Este diagrama muestra los actores y los casos de uso principales con sus subfunciones, proporcionando una visión clara de cómo los usuarios y los bibliotecarios interactúan con el sistema de gestión de biblioteca.
+
+![diagra_casos_uso](./diagrama_casos_uso.png)

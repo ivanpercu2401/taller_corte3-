@@ -1,0 +1,47 @@
+@startuml
+actor Usuario
+actor Bibliotecario
+
+usecase "Registro de Usuarios" as UC1
+usecase "Búsqueda de Libros" as UC2
+usecase "Préstamo de Libros" as UC3
+usecase "Gestión de Inventario" as UC4
+
+Usuario -- UC1
+Usuario -- UC2
+Usuario -- UC3
+Bibliotecario -- UC4
+
+note right of UC1
+  - Proporcionar información básica
+  - Validar dirección de correo electrónico
+  - Generar ID único
+  - Elegir contraseña segura
+  - Retroalimentación inmediata
+end note
+
+note right of UC2
+  - Buscar por título, autor o categoría
+  - Mostrar resultados de búsqueda
+  - Opciones de filtro
+  - Ver disponibilidad
+  - Reservar libros
+end note
+
+note right of UC3
+  - Solicitar préstamo
+  - Gestionar fechas de vencimiento
+  - Enviar recordatorios automáticos
+  - Renovar préstamos
+  - Generar multas
+end note
+
+note right of UC4
+  - Mantener registro de libros
+  - Agregar nuevos libros
+  - Eliminar libros obsoletos o dañados
+  - Seguimiento del estado físico
+  - Generar informes
+end note
+
+@enduml
