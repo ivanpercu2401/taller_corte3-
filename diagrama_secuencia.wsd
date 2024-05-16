@@ -1,0 +1,112 @@
+@startuml
+actor Usuario
+
+Usuario -> Sistema : registrarse(nombre, direccion, email, contrasena)
+Sistema -> Usuario : validarEmail(email)
+alt email duplicado
+    Sistema -> Usuario : mostrarError("Email duplicado")
+else email único
+    Sistema -> Sistema : generarId()
+    Sistema -> Usuario : confirmarRegistro()
+    Usuario -> Sistema : retroalimentacion("Registro exitoso")
+end
+@enduml
+
+@startuml
+actor Usuario
+
+Usuario -> Sistema : buscarLibro(titulo, autor, categoria)
+Sistema -> Inventario : buscarLibro(titulo, autor, categoria)
+Inventario -> Libro : obtenerDetalles()
+Libro --> Inventario : detallesLibro
+Inventario --> Sistema : listaLibros
+Sistema --> Usuario : mostrarResultadosBusqueda(listaLibros)
+
+Usuario -> Sistema : filtrarBusqueda(anoPublicacion, idioma)
+Sistema -> Inventario : filtrarBusqueda(anoPublicacion, idioma)
+Inventario -> Libro : aplicarFiltros()
+Libro --> Inventario : librosFiltrados
+Inventario --> Sistema : listaLibrosFiltrados
+Sistema --> Usuario : mostrarResultadosFiltrados(listaLibrosFiltrados)
+
+Usuario -> Sistema : verificarDisponibilidad(libroId)
+Sistema -> Inventario : verificarDisponibilidad(libroId)
+Inventario -> Libro : consultarDisponibilidad(libroId)
+Libro --> Inventario : disponibilidad
+Inventario --> Sistema : disponibilidad
+Sistema --> Usuario : mostrarDisponibilidad(disponibilidad)
+
+alt cuando libro no está disponible
+    Usuario -> Sistema : realizarReserva(libroId)
+    Sistema -> Reserva : crearReserva(libroId, usuarioId)
+    Reserva --> Sistema : confirmacionReserva
+    Sistema --> Usuario : mostrarConfirmacionReserva(confirmacionReserva)
+else cuando libro está disponible
+    Usuario -> Sistema : solicitarPrestamo(libroId)
+    Sistema -> Prestamo : crearPrestamo(libroId, usuarioId)
+    Prestamo -> Inventario : actualizarEstadoLibro(libroId, prestado)
+    Inventario -> Libro : actualizarEstado(disponibilidad = false)
+    Libro --> Inventario : confirmacionActualizacion
+    Inventario --> Prestamo : confirmacionActualizacion
+    Prestamo --> Sistema : confirmacionPrestamo
+    Sistema --> Usuario : mostrarConfirmacionPrestamo(confirmacionPrestamo)
+end
+@endum
+
+@startuml
+actor Usuario
+
+Usuario -> Sistema : solicitarPrestamo(libroId)
+Sistema -> Prestamo : crearPrestamo(libroId, usuarioId, fechaPrestamo, fechaVencimiento)
+Prestamo -> Inventario : actualizarEstadoLibro(libroId, prestado)
+Inventario -> Libro : actualizarEstado(disponibilidad = false)
+Libro --> Inventario : confirmacionActualizacion
+Inventario --> Prestamo : confirmacionActualizacion
+Prestamo --> Sistema : confirmacionPrestamo
+Sistema --> Usuario : mostrarConfirmacionPrestamo(confirmacionPrestamo)
+
+Sistema -> Usuario : enviarRecordatorio(fechaVencimiento)
+Usuario -> Sistema : renovarPrestamo(libroId)
+Sistema -> Prestamo : renovarPrestamo(libroId)
+alt no hay reservas pendientes
+    Prestamo -> Inventario : actualizarFechaVencimiento(libroId, nuevaFechaVencimiento)
+    Inventario --> Prestamo : confirmacionActualizacion
+    Prestamo --> Sistema : confirmacionRenovacion
+    Sistema --> Usuario : mostrarConfirmacionRenovacion(confirmacionRenovacion)
+else hay reservas pendientes
+    Sistema -> Usuario : mostrarError("No se puede renovar, hay reservas pendientes")
+end
+
+Sistema -> Usuario : generarMulta(libroId, diasRetraso)
+@enduml
+
+@startuml
+actor Bibliotecario
+
+Bibliotecario -> Sistema : agregarLibro(ISBN, titulo, autor, anoPublicacion)
+Sistema -> Inventario : agregarLibro(ISBN, titulo, autor, anoPublicacion)
+Inventario -> Libro : crearLibro(ISBN, titulo, autor, anoPublicacion)
+Libro --> Inventario : confirmacionCreacion
+Inventario --> Sistema : confirmacionAgregado
+Sistema --> Bibliotecario : mostrarConfirmacionAgregado(confirmacionAgregado)
+
+Bibliotecario -> Sistema : eliminarLibro(libroId)
+Sistema -> Inventario : eliminarLibro(libroId)
+Inventario -> Libro : eliminar()
+Libro --> Inventario : confirmacionEliminacion
+Inventario --> Sistema : confirmacionEliminacion
+Sistema --> Bibliotecario : mostrarConfirmacionEliminacion(confirmacionEliminacion)
+
+Bibliotecario -> Sistema : actualizarLibro(libroId, nuevaInfo)
+Sistema -> Inventario : actualizarLibro(libroId, nuevaInfo)
+Inventario -> Libro : actualizar(nuevaInfo)
+Libro --> Inventario : confirmacionActualizacion
+Inventario --> Sistema : confirmacionActualizacion
+Sistema --> Bibliotecario : mostrarConfirmacionActualizacion(confirmacionActualizacion)
+
+Bibliotecario -> Sistema : generarInforme()
+Sistema -> Inventario : generarInforme()
+Inventario --> Sistema : informeInventario
+Sistema --> Bibliotecario : mostrarInforme(informeInventario)
+@enduml
+

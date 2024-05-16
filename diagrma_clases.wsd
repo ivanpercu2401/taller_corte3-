@@ -1,0 +1,71 @@
+@startuml
+
+class Usuario {
+    - id: int
+    - nombre: String
+    - direccion: String
+    - email: String
+    - contrasena: String
+    + registrarse()
+    + validarEmail()
+    + generarId()
+    + elegirContrasena()
+    + retroalimentacion()
+}
+
+class Libro {
+    - id: int
+    - titulo: String
+    - autor: String
+    - categoria: String
+    - isbn: String
+    - año: int
+    - idioma: String
+    - disponibilidad: Boolean
+    + buscarPorTitulo()
+    + buscarPorAutor()
+    + buscarPorCategoria()
+    + filtrarPorAno()
+    + filtrarPorIdioma()
+    + verificarDisponibilidad()
+}
+
+class Prestamo {
+    - id: int
+    - libroId: int
+    - usuarioId: int
+    - fechaPrestamo: Date
+    - fechaVencimiento: Date
+    - renovaciones: int
+    - multa: float
+    + solicitarPrestamo()
+    + enviarRecordatorio()
+    + renovarPrestamo()
+    + generarMulta()
+}
+
+class Reserva {
+    - id: int
+    - libroId: int
+    - usuarioId: int
+    - fechaReserva: Date
+    + realizarReserva()
+    + cancelarReserva()
+}
+
+class Inventario {
+    - libros: List<Libro>
+    + agregarLibro()
+    + eliminarLibro()
+    + actualizarLibro()
+    + generarInforme()
+    + buscarLibro()
+}
+
+Usuario "1" --> "0..*" Prestamo : realiza
+Usuario "1" --> "0..*" Reserva : realiza
+Libro "1" --> "0..*" Prestamo : es solicitado
+Libro "1" --> "0..*" Reserva : es reservado
+Inventario "1" --> "0..*" Libro : contiene
+
+@enduml
